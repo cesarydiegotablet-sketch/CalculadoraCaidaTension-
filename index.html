@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caída de Tensión PRO</title>
+</head>
+
+<body style="background:#0f172a; color:white; font-family:Arial; text-align:center; padding:15px;">
+
+<h2>⚡ Caída de Tensión PRO</h2>
+
+<style>
+select, input {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 12px;
+  border: none;
+  margin-bottom: 15px;
+}
+</style>
+
+<p>Tipo de conductor</p>
+<select id="material">
+  <option value="0.0159">Plata</option>
+  <option value="0.0172">Cobre</option>
+  <option value="0.0221">Oro</option>
+  <option value="0.0244">Aluminio</option>
+  <option value="0.0693">Níquel</option>
+  <option value="0.098">Hierro</option>
+  <option value="0.109">Platino</option>
+  <option value="0.059">Estaño</option>
+  <option value="0.054">Tungsteno</option>
+</select>
+
+<p>Calibre (AWG)</p>
+<select id="awg">
+  <option value="0.82">18 AWG</option>
+  <option value="1.31">16 AWG</option>
+  <option value="2.08">14 AWG</option>
+  <option value="3.31">12 AWG</option>
+  <option value="5.26">10 AWG</option>
+  <option value="8.37">8 AWG</option>
+  <option value="13.3">6 AWG</option>
+  <option value="21.1">4 AWG</option>
+  <option value="26.7">3 AWG</option>
+  <option value="33.6">2 AWG</option>
+  <option value="42.4">1 AWG</option>
+  <option value="53.5">1/0 AWG</option>
+  <option value="67.4">2/0 AWG</option>
+  <option value="85.0">3/0 AWG</option>
+  <option value="107">4/0 AWG</option>
+</select>
+
+<p>Longitud del conductor (m)</p>
+<input id="longitud" type="number" step="0.01" placeholder="Ej: 30 m">
+
+<p>Tipo de sistema</p>
+<select id="sistema">
+  <option value="2">Monofásico</option>
+  <option value="2">Bifásico</option>
+  <option value="1.732">Trifásico</option>
+</select>
+
+<p>Voltaje</p>
+<select id="voltaje">
+  <option value="120">120 V</option>
+  <option value="127">127 V</option>
+  <option value="208">208 V</option>
+  <option value="220">220 V</option>
+  <option value="240">240 V</option>
+  <option value="380">380 V</option>
+  <option value="440">440 V</option>
+</select>
+
+<p>Corriente (A)</p>
+<input id="corriente" type="number" step="0.01" placeholder="Ej: 15.37 A">
+
+<p>% Máximo permitido</p>
+<select id="limite">
+  <option value="1">1 %</option>
+  <option value="2">2 %</option>
+  <option value="3">3 %</option>
+  <option value="4">4 %</option>
+  <option value="5">5 %</option>
+</select>
+
+<br>
+
+<button onclick="calcular()" 
+style="
+width:100%;
+padding:18px;
+font-size:18px;
+font-weight:bold;
+background:#facc15;
+color:#000;
+border:none;
+border-radius:15px;
+box-shadow:0 0 15px #facc15;
+margin-top:15px;
+">
+⚡ CALCULAR ⚡
+</button>
+
+<br><br>
+
+<p id="resultado" style="font-size:18px;"></p>
+
+<script>
+function calcular(){
+
+  var p = document.getElementById("material").value;
+  var S = document.getElementById("awg").value;
+  var L = document.getElementById("longitud").value;
+  var f = document.getElementById("sistema").value;
+  var V = document.getElementById("voltaje").value;
+  var I = document.getElementById("corriente").value;
+  var limite = document.getElementById("limite").value;
+
+  if(L=="" || I==""){
+    alert("Completa los datos");
+    return;
+  }
+
+  var vd = (f * L * I * p) / S;
+  var por = (vd / V) * 100;
+
+  var color = "lime";
+  var estado = "ACEPTABLE ✅";
+
+  if(por > limite){
+    color = "red";
+    estado = "EXCEDE ❌";
+  }
+
+  document.getElementById("resultado").innerHTML =
+    "<span style='color:"+color+"'>" +
+    "🔻 Caída: " + vd.toFixed(2) + " V<br>" +
+    "📉 Porcentaje: " + por.toFixed(2) + " %<br>" +
+    "⚠️ Estado: " + estado +
+    "</span>";
+}
+</script>
+
+</body>
+</html>
